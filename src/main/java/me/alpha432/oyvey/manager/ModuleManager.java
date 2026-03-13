@@ -16,6 +16,7 @@ import me.alpha432.oyvey.features.modules.player.FastPlace;
 import me.alpha432.oyvey.features.modules.player.NoFall;
 import me.alpha432.oyvey.features.modules.player.Velocity;
 import me.alpha432.oyvey.features.modules.render.BlockHighlight;
+import me.alpha432.oyvey.features.modules.render.BlockHighlight2;
 import me.alpha432.oyvey.util.traits.Jsonable;
 import me.alpha432.oyvey.util.traits.Util;
 
@@ -40,6 +41,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new FastPlace());
         modules.add(new Velocity());
         modules.add(new BlockHighlight());
+        modules.add(new BlockHighlight2());
         modules.add(new NoFall());
     }
 
