@@ -13,7 +13,7 @@ import java.awt.*;
 
 public class BlockHighlight2 extends Module {
     public BlockHighlight2() {
-        super("BlockHighlight", "Draws box at the block that you are looking at", Category.RENDER, true, false, false);
+        super("BlockHighlightblue", "Draws box at the block that you are looking at", Category.RENDER, true, false, false);
     }
 
     @Subscribe public void onRender3D(Render3DEvent event) {
@@ -22,7 +22,7 @@ public class BlockHighlight2 extends Module {
             if (shape.isEmpty()) return;
             Box box = shape.getBoundingBox();
             box = box.offset(result.getBlockPos());
-            RenderUtil.drawBox(event.getMatrix(), box, Color.blue, 1f);
+            RenderUtil.drawBox(event.getMatrix(), box, Color.blue, 2f);
         }
     }
 }
