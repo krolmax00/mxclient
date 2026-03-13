@@ -40,6 +40,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new FastPlace());
         modules.add(new Velocity());
         modules.add(new BlockHighlight());
+        modules.add(new BlockHighlight2());
         modules.add(new NoFall());
     }
 
