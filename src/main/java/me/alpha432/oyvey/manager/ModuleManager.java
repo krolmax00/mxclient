@@ -8,7 +8,6 @@ import me.alpha432.oyvey.features.Feature;
 import me.alpha432.oyvey.features.modules.Module;
 import me.alpha432.oyvey.features.modules.client.ClickGui;
 import me.alpha432.oyvey.features.modules.client.HudModule;
-import me.alpha432.oyvey.features.modules.combat.*;
 import me.alpha432.oyvey.features.modules.combat.Reach;
 import me.alpha432.oyvey.features.modules.combat.AnchorAura;
 import me.alpha432.oyvey.features.modules.combat.SilentAim;
@@ -19,8 +18,11 @@ import me.alpha432.oyvey.features.modules.combat.ShieldBreaker;
 import me.alpha432.oyvey.features.modules.combat.TriggerBot;
 import me.alpha432.oyvey.features.modules.combat.Criticals;
 import me.alpha432.oyvey.features.modules.combat.SmoothAimbot;
-import me.alpha432.oyvey.features.modules.combat.MaceBoost;
+import me.alpha432.oyvey.features.modules.combat.CrystalAura;
+import me.alpha432.oyvey.features.modules.combat.AnchorMacro198;
+import me.alpha432.oyvey.features.modules.combat.FastXP;
 import me.alpha432.oyvey.features.modules.misc.MCF;
+import me.alpha432.oyvey.features.modules.misc.PingSpoof;
 import me.alpha432.oyvey.features.modules.movement.ReverseStep;
 import me.alpha432.oyvey.features.modules.movement.Step;
 import me.alpha432.oyvey.features.modules.movement.Fly;
@@ -32,6 +34,8 @@ import me.alpha432.oyvey.features.modules.render.BlockHighlight2;
 import me.alpha432.oyvey.features.modules.render.PlayerESP;
 import me.alpha432.oyvey.features.modules.render.ChestESP;
 import me.alpha432.oyvey.features.modules.render.AncientDebrisESP;
+import me.alpha432.oyvey.features.modules.render.Tracers;
+import me.alpha432.oyvey.features.modules.render.BlockESP;
 import me.alpha432.oyvey.util.traits.Jsonable;
 import me.alpha432.oyvey.util.traits.Util;
 
@@ -56,11 +60,14 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new KillAura());
         modules.add(new AutoTotem());
         modules.add(new TriggerBot());
-        modules.add(new MaceBoost());
         modules.add(new ShieldBreaker());
         modules.add(new Reach());
         modules.add(new SilentAim());
+        modules.add(new CrystalAura());
+        modules.add(new AnchorMacro198());
+        modules.add(new FastXP());
         modules.add(new MCF());
+        modules.add(new PingSpoof());
         modules.add(new Step());
         modules.add(new ReverseStep());
         modules.add(new Fly());
@@ -72,6 +79,8 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new ChestESP());
         modules.add(new NoFall());
         modules.add(new AncientDebrisESP());
+        modules.add(new Tracers());
+        modules.add(new BlockESP());
     }
 
     public Module getModuleByName(String name) {

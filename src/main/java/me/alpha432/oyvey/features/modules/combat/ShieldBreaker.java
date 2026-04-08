@@ -3,12 +3,9 @@ package me.alpha432.oyvey.features.modules.combat;
 import me.alpha432.oyvey.features.modules.Module;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
-import net.minecraft.item.ShieldItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
 public class ShieldBreaker extends Module {
@@ -16,36 +13,56 @@ public class ShieldBreaker extends Module {
     private final MinecraftClient mc = MinecraftClient.getInstance();
 
     public ShieldBreaker() {
-        super("ShieldBreaker", "Automatically attacks players holding shields with an axe", Category.COMBAT, true, false, false);
+        super("ShieldBreaker", "Automatically swaps to axe when enemy blocks", Category.COMBAT, true, false, false);
     }
 
     @Override
     public void onUpdate() {
-        if (mc.player == null || mc.world == null || mc.player.isUsingItem()) return;
 
-        ClientPlayerEntity player = mc.player;
+        if (mc.player == null || mc.world == null) return;
 
-        // Nur angreifen, wenn Cooldown fertig
-        if (player.getAttackCooldownProgress(0.5f) < 1.0f) return;
+        PlayerEntity target = null;
 
-        // Nur wenn Spieler eine Axt hält
-        if (!(player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof AxeItem)) return;
+        for (PlayerEntity player : mc.world.getPlayers()) {
 
-        // Gegner suchen (Players in 10 Blöcken, die Schild in der Offhand halten)
-        for (LivingEntity entity : mc.world.getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(10), e -> e != player)) {
-            if (isShieldBlocking(entity)) {
-                // Angriff ausführen
-                mc.interactionManager.attackEntity(player, entity);
-                player.swingHand(Hand.MAIN_HAND);
+            if (player == mc.player) continue;
+
+            if (player.isBlocking()) {
+                target = player;
                 break;
             }
         }
+
+        if (target == null) return;
+
+        int axeSlot = findAxe();
+
+        if (axeSlot == -1) return;
+
+        int oldSlot = mc.player.getInventory().getSelectedSlot();
+
+        // swap to axe
+        mc.player.getInventory().setSelectedSlot(axeSlot);
+
+        // attack
+        mc.interactionManager.attackEntity(mc.player, target);
+        mc.player.swingHand(Hand.MAIN_HAND);
+
+        // swap back
+        mc.player.getInventory().setSelectedSlot(oldSlot);
     }
 
-    private boolean isShieldBlocking(LivingEntity entity) {
-        if (entity instanceof PlayerEntity target) {
-            return target.getEquippedStack(EquipmentSlot.OFFHAND).getItem() instanceof ShieldItem;
+    private int findAxe() {
+
+        for (int i = 0; i < 9; i++) {
+
+            ItemStack stack = mc.player.getInventory().getStack(i);
+
+            if (stack.getItem() instanceof AxeItem) {
+                return i;
+            }
         }
-        return false;
+
+        return -1;
     }
 }

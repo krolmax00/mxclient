@@ -1,50 +1,47 @@
 package me.alpha432.oyvey.features.modules.render;
 
+import com.google.common.eventbus.Subscribe;
 import me.alpha432.oyvey.event.impl.Render3DEvent;
 import me.alpha432.oyvey.features.modules.Module;
+import me.alpha432.oyvey.util.render.RenderUtil;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 
+import java.awt.*;
+
 public class ChestESP extends Module {
 
-    private final MinecraftClient mc = MinecraftClient.getInstance();
-
     public ChestESP() {
-        super("ChestESP", "Highlights chests", Category.RENDER, true, false, false);
+        super("ChestESP", "Shows nearby chests", Category.RENDER, true, false, false);
     }
 
-    @Override
+    @Subscribe
     public void onRender3D(Render3DEvent event) {
 
-        if (mc.world == null || mc.player == null) return;
-
-        int range = 50;
+        if (mc.player == null || mc.world == null) return;
 
         BlockPos playerPos = mc.player.getBlockPos();
 
-        for (int x = -range; x <= range; x++) {
-            for (int y = -range; y <= range; y++) {
-                for (int z = -range; z <= range; z++) {
+        int radius = 20; // 🔥 kleiner radius = kein lag
 
-                    BlockPos pos = playerPos.add(x, y, z);
+        for (BlockPos pos : BlockPos.iterate(
+                playerPos.add(-radius, -10, -radius),
+                playerPos.add(radius, 10, radius))) {
 
-                    if (mc.world.getBlockState(pos).getBlock() == Blocks.CHEST) {
+            BlockEntity be = mc.world.getBlockEntity(pos);
 
-                        Box box = new Box(pos);
+            if (be instanceof ChestBlockEntity) {
 
-                        drawBox(box);
-                    }
-                }
+                RenderUtil.drawBox(
+                        event.getMatrix(),
+                        new Box(pos),
+                        Color.GREEN,
+                        1.5f
+                );
             }
         }
-    }
-
-    private void drawBox(Box box) {
-
-        // einfache Debug-Ausgabe (damit es compiliert)
-        System.out.println("Chest ESP at: " + box.minX + " " + box.minY + " " + box.minZ);
     }
 }
